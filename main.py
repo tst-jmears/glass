@@ -19,22 +19,60 @@ import json
 
 import webapp2
 
-class MessageHandler(webapp2.RequestHandler):
+class BaseHandler(webapp2.RequestHandler):
     def get(self):
         self.response.headers['Content-Type'] = 'application/json'
-        message = self.request.get('m', '')
-        if message:
-            # Put calls to glass with message here.
-            self.response.write(json.dumps({'success': True}))
-        else:
-            self.response.write(json.dumps({
-                'success': False,
-                'error': 'No message given.'
-            }))
+        self.response.write(json.dumps(self.execute()))
 
     def post(self):
         self.get()
 
+    def execute(self):
+        return {
+            'success': False,
+            'error': 'Not implemeted.'
+        }
+
+class MessageHandler(BaseHandler):
+    def execute(self):
+        message = self.request.get('m', '')
+        if message:
+            # Put calls to glass with message here.
+            return {'success': True}
+        else:
+            return {
+                'success': False,
+                'error': 'No message given.'
+            }
+
+class LocationHandler(BaseHandler):
+    def execute(self):
+        lat = self.request.get('lat', '')
+        lng = self.request.get('lng', '')
+        if lat and lng:
+            # Put calls to glass with message here.
+            return {'success': True}
+        else:
+            return {
+                'success': False,
+                'error': 'Missing location data.'
+            }
+
+class ImageHandler(BaseHandler):
+    def execute(self):
+        src = self.request.get('src', '')
+        if src:
+            # Put calls to glass with message here.
+            return {'success': True}
+        else:
+            return {
+                'success': False,
+                'error': 'No image source given.'
+            }
+
 app = webapp2.WSGIApplication([
-    ('/', MessageHandler)
+    ('/', MessageHandler),
+    ('/message', MessageHandler),
+    ('/location', LocationHandler),
+    ('/image', ImageHandler)
 ])
