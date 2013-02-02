@@ -3,6 +3,16 @@
 
 Accepts argument to the URL of: http://.../?m=chat%20message. You can also do a
 POST.
+
+A way to cheat and send a message to this app using the Javascript console.
+
+var sendMessage = function(m) {
+    // Fix the URL.
+    document.createElement('img').src = 'http://.../?m=' + encodeURIComponent(m);
+};
+
+// Sample usage.
+sendMessage('I am a message.');
 """
 
 import json
